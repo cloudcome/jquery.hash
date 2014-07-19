@@ -1,0 +1,27 @@
+{
+  "name": "jquery.hash",
+  "version": "1.1.1",
+  "description": "Simple to operate hash.",
+  "keywords": [
+    "jquery",
+    "yquery",
+    "ydr",
+    "location",
+    "hashchange",
+    "hash"
+  ],
+  "author": {
+    "name": "cloudcome",
+    "email": "cloudcome@163.com"
+  },
+  "homepage": "https://ydr.me/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cloudcome/jquery.hash"
+  },
+  "licenses": "MIT",
+  "spm": {
+    "main": "jquery.hash.js",
+    "dependencies": {}
+  }
+}
