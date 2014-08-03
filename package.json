@@ -1,6 +1,6 @@
 {
   "name": "jquery.hash",
-  "version": "1.1.1",
+  "version": "1.2.1",
   "description": "Simple to operate hash.",
   "keywords": [
     "jquery",
@@ -12,9 +12,10 @@
   ],
   "author": {
     "name": "cloudcome",
-    "email": "cloudcome@163.com"
+    "email": "cloudcome@163.com",
+    "url": "http://ydr.me"
   },
-  "homepage": "https://ydr.me/",
+  "homepage": "http://festatic.aliapp.com/js/jquery.hash/",
   "repository": {
     "type": "git",
     "url": "https://github.com/cloudcome/jquery.hash"
