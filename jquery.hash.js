@@ -1,29 +1,21 @@
-/*!
- * jquery.hash.js
- * @author ydr.me
- * @version 1.2
- * 2014年6月27日17:40:16
- */
-
-
-
 /**
- *
-
- *
+ * jquery.hash
+ * @author  ydr.me
  */
-
-
 
 
 
 module.exports = function($) {
     'use strict';
-    var udf,
+
+    var 
+        udf,
         win = window,
         defaults = {
             // 传入hash值，为空时默认为当前window.location.hash
-            hash: ''
+            hash: '',
+            // 默认类型
+            type: '!'
         },
         encode = encodeURIComponent,
         decode = decodeURIComponent,
@@ -59,8 +51,8 @@ module.exports = function($) {
             '!': '/',
             '?': '&'
         },
-        regHashReplace = /^[^#]*/,
-        regHashWhich = /^(#[^#]*)(#?.*)$/,
+        regConstructorReplace = /^[^#]*/,
+        regConstructorWhich = /^(#[^#]*)(#?.*)$/,
         isArray = $.isArray,
         inArray = $.inArray,
         each = $.each;
@@ -74,14 +66,16 @@ module.exports = function($) {
 
         var options = $.extend({}, defaults, settings);
         options.hash = options.hash || win.location.hash;
-        return new Hash(options)._parse();
+        return new Constructor(options)._parse();
     };
     $.hash.defaults = defaults;
 
 
-    $(win).bind('hashchange', function(e) {
-        var newRet = $.hash(e.newURL).get(),
-            oldRet = $.hash(e.oldURL).get(),
+    $(win).bind('hashchange', function(eve) {
+        var 
+            oe = eve.originalEvent,
+            newRet = $.hash(oe.newURL).get(),
+            oldRet = $.hash(oe.oldURL).get(),
             // {
             //    "a": {
             //        old: '1',
@@ -169,13 +163,11 @@ module.exports = function($) {
 
     // constructor
 
-    function Hash(options) {
+    function Constructor(options) {
         this.options = options;
     }
 
-    Hash.prototype = {
-
-
+    Constructor.prototype = {
         /**
          * 重置 _equal、_split
          */
@@ -193,17 +185,25 @@ module.exports = function($) {
          * 解析
          */
         _parse: function() {
-            var that = this,
-                hash = that.options.hash,
+            var 
+                that = this,
+                options = that.options,
+                hash = options.hash,
                 matches,
                 ret = {},
                 arr,
                 lastKey;
 
-            hash = hash.replace(regHashReplace, '');
-            if (hash[1] !== '!' && hash[1] !== '?') return that;
+            hash = hash.replace(regConstructorReplace, '');
+            if (hash[1] !== '!' && hash[1] !== '?'){
+                that._type = options.type;
+                that._reset();
+                that._suffix = '';
+                that._result = {};
+                return that;
+            }
 
-            matches = hash.match(regHashWhich);
+            matches = hash.match(regConstructorWhich);
             that._hash = matches[1];
             that._suffix = matches[2];
 
@@ -306,7 +306,7 @@ module.exports = function($) {
             for (i in map) {
                 map[i] = '' + map[i];
                 // 脏检查
-                if (that._result[i] !== map[i]) {
+                if (that._result[i] != map[i]) {
                     hasChange = !0;
                     that._result[i] = map[i];
                 }

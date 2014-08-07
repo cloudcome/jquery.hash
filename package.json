@@ -1,7 +1,7 @@
 {
   "name": "jquery.hash",
-  "version": "1.2.1",
-  "description": "Simple to operate hash.",
+  "version": "1.3.0",
+  "description": "jquery hash 监听、设置、获取hash",
   "keywords": [
     "jquery",
     "yquery",
@@ -15,10 +15,13 @@
     "email": "cloudcome@163.com",
     "url": "http://ydr.me"
   },
-  "homepage": "http://festatic.aliapp.com/js/jquery.hash/",
+  "homepage": "http://spmjs.io/docs/jquery.hash/",
   "repository": {
     "type": "git",
     "url": "https://github.com/cloudcome/jquery.hash"
+  },
+  "bugs": {
+    "url": "https://github.com/cloudcome/jquery.hash/issues"
   },
   "licenses": "MIT",
   "spm": {

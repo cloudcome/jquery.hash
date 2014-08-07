@@ -1,60 +1,93 @@
-# jquery.hash [![spm version](http://spmjs.io/badge/jquery.hash)](http://spmjs.io/package/jquery.hash)
-AUTHOR WEBSITE: [http://ydr.me/](http://ydr.me/)
+# jquery-drag
 
-Simple to operate hash.
+---
 
-__IT IS [A spm package](http://spmjs.io/package/jquery.hash).__
+[![spm version](http://spmjs.io/badge/jquery-drag)](http://spmjs.io/package/jquery-drag)
 
+jQuery 鼠标拖拽插件
 
+---
 
+## Install
 
-#USAGE
 ```
+$ spm install jquery.hash --save
+```
+
+## Usage
+
+It is very easy to use this module.
+
+```js
+// require jquery
 var $ = require('jquery');
+
+// extend jquery
 require('jquery.hash')($);
 
-// 1. options
-$.hash(options);
-
-// 2. get
-$.hash().get();
-$.hash().get("a");
-$.hash().get(["a", "b"]);
-
-//3. set
-$.hash().set("key", "val", "!");
-$.hash().set({"key1":"val1", "key2": "val2"}, "?");
-
-// 4. remove
-$.hash().remove("key");
-$.hash().remove(["key1", "key2"]);
-$.hash().remove();
-
-// 5. listen
-$.hash().listen("key", fn);
-$.hash().listen("key1", "key2", fn);
-$.hash().listen(["key1", "key2"], fn);
-$.hash().listen(fn);
-
-// 6. suffix
-$.hash().suffix();
-$.hash().suffix('123');
+// use
+$.hash();
 ```
 
 
+## Api
 
-#OPTIONS
-```
-defaults = {
+### Options
+```js
+$.hash.defaults = {
     // 传入hash值，为空时默认为当前window.location.hash
     hash: ''
 }
 ```
 
+### Functions
 
-#SET OPTIONS
+#### get
+```js
+$.hash().get();
+$.hash().get("a");
+$.hash().get(["a", "b"]);
 ```
-$.hash.defaults;
+
+#### set
+```js
+$.hash().set("key", "val", "!");
+$.hash().set({"key1":"val1", "key2": "val2"}, "?");
+```
+
+#### remove
+```js
+$.hash().remove("key");
+$.hash().remove(["key1", "key2"]);
+$.hash().remove();
+```
+
+#### listen
+```js
+// listen one
+$.hash().listen("key", fn);
+
+// listen or
+$.hash().listen("key1", "key2", fn);
+
+// listen both
+$.hash().listen(["key1", "key2"], fn);
+
+// listen all
+$.hash().listen(fn);
+```
+
+
+#### get suffix
+```js
+$.hash().suffix();
+```
+
+
+
+#### set suffix
+```js
+$.hash().suffix('123');
 ```
 
 
