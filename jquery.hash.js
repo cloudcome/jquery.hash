@@ -8,7 +8,7 @@
 module.exports = function($) {
     'use strict';
 
-    var 
+    var
         udf,
         win = window,
         defaults = {
@@ -72,7 +72,7 @@ module.exports = function($) {
 
 
     $(win).bind('hashchange', function(eve) {
-        var 
+        var
             oe = eve.originalEvent,
             newRet = $.hash(oe.newURL).get(),
             oldRet = $.hash(oe.oldURL).get(),
@@ -172,9 +172,9 @@ module.exports = function($) {
          * 重置 _equal、_split
          */
         _reset: function() {
-            var that = this;
-            that._equal = hashEqualMap[that._type];
-            that._split = hashSplitMap[that._type];
+            var the = this;
+            the._equal = hashEqualMap[the._type];
+            the._split = hashSplitMap[the._type];
         },
 
 
@@ -185,9 +185,9 @@ module.exports = function($) {
          * 解析
          */
         _parse: function() {
-            var 
-                that = this,
-                options = that.options,
+            var
+                the = this,
+                options = the.options,
                 hash = options.hash,
                 matches,
                 ret = {},
@@ -195,30 +195,30 @@ module.exports = function($) {
                 lastKey;
 
             hash = hash.replace(regConstructorReplace, '');
-            if (hash[1] !== '!' && hash[1] !== '?'){
-                that._type = options.type;
-                that._reset();
-                that._suffix = '';
-                that._result = {};
-                return that;
+            if (hash[1] !== '!' && hash[1] !== '?') {
+                the._type = options.type;
+                the._reset();
+                the._suffix = '';
+                the._result = {};
+                return the;
             }
 
             matches = hash.match(regConstructorWhich);
-            that._hash = matches[1];
-            that._suffix = matches[2];
+            the._hash = matches[1];
+            the._suffix = matches[2];
 
-            that._type = that._hash[1];
-            that._reset();
-            that._result = ret;
+            the._type = the._hash[1];
+            the._reset();
+            the._result = ret;
 
-            that._hash = that._hash.replace(/^[#!?\/]+/, '');
-            arr = that._hash.split(that._split);
+            the._hash = the._hash.replace(/^[#!?\/]+/, '');
+            arr = the._hash.split(the._split);
 
             // /a/1/2/3/
             // /a/1/2/3
             // a/1/2/3
             // a/1/2/3/
-            if (that._type === '!') {
+            if (the._type === '!') {
                 each(arr, function(index, val) {
                     if (index % 2) {
                         if (lastKey) ret[lastKey] = decode(val);
@@ -232,9 +232,9 @@ module.exports = function($) {
             // a=1&b=2&c=
             // a=1&b=2&c
             // a=1&b=2&
-            else if (that._type === '?') {
+            else if (the._type === '?') {
                 each(arr, function(index, part) {
-                    var pos = part.indexOf(that._equal),
+                    var pos = part.indexOf(the._equal),
                         key = part.slice(0, pos),
                         val = decode(part.slice(pos + 1));
 
@@ -242,31 +242,50 @@ module.exports = function($) {
                 });
             }
 
-            that._result = ret;
-            return that;
+            the._result = ret;
+            return the;
         },
 
 
 
         /**
          * 根据当前解析结果字符化并改变window.location.hash
-         * @return window.lcoation.hash
-         * @version 1.0
+         * @param {String} type hash 类型
+         * @return hash stringify
          * 2014年6月30日17:31:55
+         * 2014年8月8日10:05:02
          */
-        stringify: function() {
-            var that = this,
+        stringify: function(type) {
+            var the = this,
                 arr = [];
 
-            each(that._result, function(key, val) {
-                arr.push(key + that._equal + encode(val));
+            if (type === '!' || type === '?') {
+                the._type = type;
+                the._reset();
+            }
+
+            each(the._result, function(key, val) {
+                arr.push(key + the._equal + encode(val));
             });
 
-            that._hash = that._type + arr.join(that._split);
-            location.hash = that._hash + that._suffix;
-
-            return location.hash;
+            the._hash = the._type + arr.join(the._split);
+            return the._hash + the._suffix;
         },
+
+
+
+
+        /**
+         * 根据当前解析结果字符化并改变window.location.hash
+         * @param {String} type hash 类型
+         * @return window.lcoation.hash
+         * 2014年8月8日10:04:57
+         */
+        location: function(type) {
+            if (this._hasChange) location.hash = this.stringify(type);
+        },
+
+
 
 
 
@@ -274,45 +293,28 @@ module.exports = function($) {
          * 设置
          * @param {String/Object} key  hash键或者hash键值对
          * @param {String}        val  hash值或hash类型
-         * @param {String}        type hash类型
          * 会自动设置浏览器的hash
          * @version 1.0
          * 2014年6月30日17:31:55
          */
-        set: function(key, val, type) {
-            var map = {},
-                hasChange, that = this,
+        set: function(key, val) {
+            var
+                map = {},
+                the = this,
                 i;
             // .set(obj)
             if (val === udf) map = key;
             // .set(str, str)
-            // .set(obj, str)
-            else if (type === udf) {
-                if ($.type(key) === 'object') {
-                    map = key;
-                    that._type = val;
-                    that._reset();
-                } else {
-                    map[key] = val;
-                }
-            }
-            // .set(str, str, str)
-            else {
-                map[key] = val;
-                that._type = type;
-                that._reset();
-            }
+            else map[key] = val;
 
             for (i in map) {
                 map[i] = '' + map[i];
                 // 脏检查
-                if (that._result[i] != map[i]) {
-                    hasChange = !0;
-                    that._result[i] = map[i];
+                if (the._result[i] != map[i]) {
+                    the._hasChange = !0;
+                    the._result[i] = map[i];
                 }
             }
-
-            if (hasChange) that.stringify();
 
             return this;
         },
@@ -326,19 +328,19 @@ module.exports = function($) {
          * 获取
          * @param  {String/Array} key 单个键或多个键数组
          * @return {String/Object}    单个值或键值对
-         * @version 1.0
          * 2014年6月30日17:36:00
          */
         get: function(key) {
             if (key === udf) return this._result;
 
-            var isMulitiple = isArray(key),
+            var
+                isMulitiple = isArray(key),
                 keys = isMulitiple ? key : [key],
                 ret = {},
-                that = this;
+                the = this;
 
             each(keys, function(index, key) {
-                ret[key] = that._result[key];
+                ret[key] = the._result[key];
             });
 
             return isMulitiple ? ret : ret[key];
@@ -355,7 +357,6 @@ module.exports = function($) {
         /**
          * 移除
          * @param  {String/Array} key 单个键或多个键数组
-         * @version 1.0
          * 2014年6月30日17:40:35
          */
         remove: function(key) {
@@ -364,15 +365,16 @@ module.exports = function($) {
                 this.stringify();
                 return;
             }
-            var isMulitiple = isArray(key),
+            var
+                isMulitiple = isArray(key),
                 keys = isMulitiple ? key : [key],
-                that = this;
+                the = this;
 
             each(keys, function(index, key) {
-                delete(that._result[key]);
+                delete(the._result[key]);
             });
 
-            that.stringify();
+            return this;
         },
 
 
@@ -388,11 +390,11 @@ module.exports = function($) {
          * $.hash().listen("key1", "key2", fn);
          * $.hash().listen(["key1", "key2"], fn);
          * $.hash().listen(fn);
-         * @version 1.0
          * 2014年7月1日11:27:46
          */
         listen: function() {
-            var args = arguments,
+            var
+                args = arguments,
                 argL = args.length,
                 arg0 = args[0],
                 fn = args[argL - 1],
@@ -454,13 +456,13 @@ module.exports = function($) {
          * @return {String}     读取值
          */
         suffix: function(val) {
-            var that = this;
-            if (val === udf) return that._suffix;
+            var the = this;
+            if (val === udf) return the._suffix;
 
-            that._suffix = '#' + val;
-            that.stringify();
+            the._suffix = '#' + val;
+            the.stringify();
 
-            return that;
+            return the;
         }
     };
 

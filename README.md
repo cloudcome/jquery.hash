@@ -1,10 +1,10 @@
-# jquery-drag
+# jquery.hash
 
 ---
 
-[![spm version](http://spmjs.io/badge/jquery-drag)](http://spmjs.io/package/jquery-drag)
+[![spm version](http://spmjs.io/badge/jquery.hash)](http://spmjs.io/package/jquery.hash)
 
-jQuery 鼠标拖拽插件
+jquery.hash 监听、设置、获取hash
 
 ---
 
@@ -30,13 +30,24 @@ $.hash();
 ```
 
 
+## HashType
+
+### HashType `!`
+`#!a/1/b/2/c/3`
+
+### HashType `?`
+`#?a=1&b=2&c=3`
+
+
 ## Api
 
 ### Options
 ```js
 $.hash.defaults = {
     // 传入hash值，为空时默认为当前window.location.hash
-    hash: ''
+    hash: '',
+    // 默认hashtype
+    type: '!'
 }
 ```
 
@@ -51,8 +62,11 @@ $.hash().get(["a", "b"]);
 
 #### set
 ```js
-$.hash().set("key", "val", "!");
-$.hash().set({"key1":"val1", "key2": "val2"}, "?");
+$.hash().set("key", "val");
+$.hash().set({
+	"key1":"val1",
+	"key2": "val2"
+});
 ```
 
 #### remove
@@ -61,6 +75,21 @@ $.hash().remove("key");
 $.hash().remove(["key1", "key2"]);
 $.hash().remove();
 ```
+
+
+#### stringify
+```js
+$.hash().set("key", "val").remove("a").stringify("!");
+$.hash().set("key", "val").remove(["a", "b"]).stringify("?");
+```
+
+
+#### location
+```js
+$.hash().set("key", "val").remove("a").location("!");
+$.hash().set("key", "val").remove(["a", "b"]).location("?");
+```
+
 
 #### listen
 ```js
@@ -90,4 +119,14 @@ $.hash().suffix();
 $.hash().suffix('123');
 ```
 
+
+
+
+
+## Demo
+[http://spmjs.io/docs/jquery.hash/examples/index.html](http://spmjs.io/docs/jquery.hash/examples/index.html)
+
+
+## History
+[http://spmjs.io/docs/jquery.hash/history.html](http://spmjs.io/docs/jquery.hash/history.html)
 

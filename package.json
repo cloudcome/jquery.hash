@@ -1,7 +1,7 @@
 {
   "name": "jquery.hash",
-  "version": "1.3.0",
-  "description": "jquery hash 监听、设置、获取hash",
+  "version": "1.0.0",
+  "description": "jquery.hash 监听、设置、获取hash",
   "keywords": [
     "jquery",
     "yquery",
