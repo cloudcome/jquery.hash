@@ -269,7 +269,7 @@ module.exports = function($) {
             });
 
             the._hash = the._type + arr.join(the._split);
-            return the._hash + the._suffix;
+            return '#' + the._hash + the._suffix;
         },
 
 
@@ -282,7 +282,7 @@ module.exports = function($) {
          * 2014年8月8日10:04:57
          */
         location: function(type) {
-            if (this._hasChange) location.hash = this.stringify(type);
+            location.hash = this.stringify(type).replace(/^#+/, '');
         },
 
 
@@ -300,23 +300,16 @@ module.exports = function($) {
         set: function(key, val) {
             var
                 map = {},
-                the = this,
-                i;
+                the = this;
+                
             // .set(obj)
             if (val === udf) map = key;
             // .set(str, str)
             else map[key] = val;
 
-            for (i in map) {
-                map[i] = '' + map[i];
-                // 脏检查
-                if (the._result[i] != map[i]) {
-                    the._hasChange = !0;
-                    the._result[i] = map[i];
-                }
-            }
+            $.extend(the._result, map);
 
-            return this;
+            return the;
         },
 
 
@@ -360,21 +353,22 @@ module.exports = function($) {
          * 2014年6月30日17:40:35
          */
         remove: function(key) {
+            var the = this;
+
             if (key === udf) {
-                this._result = {};
-                this.stringify();
-                return;
+                the._result = {};
+                return the;
             }
+
             var
                 isMulitiple = isArray(key),
-                keys = isMulitiple ? key : [key],
-                the = this;
+                keys = isMulitiple ? key : [key];
 
             each(keys, function(index, key) {
                 delete(the._result[key]);
             });
 
-            return this;
+            return the;
         },
 
 
@@ -443,6 +437,8 @@ module.exports = function($) {
                     if (!~inArray(fn, callbacks)) callbacks.push(fn);
                 });
             }
+
+            return this;
         },
 
 
@@ -460,7 +456,6 @@ module.exports = function($) {
             if (val === udf) return the._suffix;
 
             the._suffix = '#' + val;
-            the.stringify();
 
             return the;
         }
